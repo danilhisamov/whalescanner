@@ -1,0 +1,18 @@
+version: '2'
+services:
+  postgres-dev:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=whalescanner
+      - POSTGRES_PASSWORD=<VeryGoodPassword1234!>
+      - POSTGRES_DB=whalescanner
+  postgres-prod:
+    image: postgres:latest
+    ports:
+      - "5431:5432"
+    environment:
+      - POSTGRES_USER=whalescanner
+      - POSTGRES_PASSWORD=<VeryGoodPassword1234!>
+      - POSTGRES_DB=whalescanner

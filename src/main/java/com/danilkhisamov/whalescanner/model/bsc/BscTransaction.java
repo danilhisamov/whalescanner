@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 public class BscTransaction {
-    private String blockNumber;
+    private String hash;
     private String timeStamp;
     private String from;
     private String to;
@@ -23,6 +23,6 @@ public class BscTransaction {
                 "\n" +
                 "to: " + to +
                 "\n" +
-                "value: " + value;
+                "value: " + value.replaceFirst("0{18}$", ""); // remove last 18 0s
     }
 }

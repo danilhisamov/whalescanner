@@ -14,8 +14,11 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import javax.annotation.PostConstruct;
 
+import java.util.Collection;
+
 import static org.telegram.abilitybots.api.objects.Locality.*;
 import static org.telegram.abilitybots.api.objects.Privacy.ADMIN;
+import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 @Slf4j
 @Component
@@ -51,19 +54,9 @@ public class Bot extends AbilityBot {
         return Ability.builder()
                 .name("start")
                 .info("Начать")
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> silent.send("Hello", cnt.chatId()))
-                .build();
-    }
-
-    public Ability ping() {
-        return Ability.builder()
-                .name("ping")
-                .info("Ping")
-                .privacy(ADMIN)
-                .locality(ALL)
-                .action(cnt -> silent.send("pong", cnt.chatId()))
                 .build();
     }
 
@@ -72,7 +65,7 @@ public class Bot extends AbilityBot {
                 .name("register")
                 .info("Register whale. Parameters[address, name]")
                 .input(2)
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processRegisterCommand(cnt)))
                 .build();
@@ -83,7 +76,7 @@ public class Bot extends AbilityBot {
                 .name("delete")
                 .info("Delete whale. Parameters[address]")
                 .input(1)
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processDeleteCommand(cnt)))
                 .build();
@@ -94,7 +87,7 @@ public class Bot extends AbilityBot {
                 .name("balance")
                 .info("Get whale balance. Parameters[address]")
                 .input(1)
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processBalanceCommand(cnt)))
                 .build();
@@ -105,9 +98,42 @@ public class Bot extends AbilityBot {
                 .name("transactions")
                 .info("Get whale's last n transactions. Parameters[address, n]")
                 .input(2)
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processTransactionsCommand(cnt)))
+                .build();
+    }
+
+    public Ability tokens() {
+        return Ability.builder()
+                .name("tokens")
+                .info("Get whale's tokens. Parameters[address]")
+                .input(1)
+                .privacy(PUBLIC)
+                .locality(ALL)
+                .action(cnt -> sendMessages(commandProcessor.processTokensCommand(cnt)))
+                .build();
+    }
+
+    public Ability tokenTransactions() {
+        return Ability.builder()
+                .name("token_transactions")
+                .info("Get whale's last n token transactions. Parameters[address, tokenAddress, n]")
+                .input(3)
+                .privacy(PUBLIC)
+                .locality(ALL)
+                .action(cnt -> sendMessages(commandProcessor.processTokenTransactionsCommand(cnt)))
+                .build();
+    }
+
+    public Ability markets() {
+        return Ability.builder()
+                .name("markets")
+                .info("Get token markets. Parameters[tokenName]")
+                .input(1)
+                .privacy(PUBLIC)
+                .locality(ALL)
+                .action(cnt -> sendMessages(commandProcessor.processMarketsCommand(cnt)))
                 .build();
     }
 
@@ -115,7 +141,7 @@ public class Bot extends AbilityBot {
         return Ability.builder()
                 .name("list")
                 .info("Get list of registered whales")
-                .privacy(ADMIN)
+                .privacy(PUBLIC)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processListCommand(cnt)))
                 .build();
@@ -127,5 +153,15 @@ public class Bot extends AbilityBot {
         } catch (TelegramApiException e) {
             log.error(String.format("Error during send message %s", sendMessage), e);
         }
+    }
+
+    public void sendMessages(Collection<SendMessage> messages) {
+        messages.forEach(message -> {
+            try {
+                sender.execute(message);
+            } catch (TelegramApiException e) {
+                log.error(String.format("Error during send message %s", message), e);
+            }
+        });
     }
 }
