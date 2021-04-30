@@ -23,15 +23,16 @@ public class ChromeDriverConfig {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public ChromeDriver chromeDriver() {
-        System.setProperty("webdriver.chrome.driver",
-                System.getProperty("GOOGLE_CHROME_SHIM",
-                        Optional.ofNullable(BscScanWebParser.class.getClassLoader().getResource("chromedriver_win32/chromedriver.exe"))
-                                .map(URL::getFile)
-                                .orElseThrow()
-                )
-        );
+//        System.setProperty("webdriver.chrome.driver",
+//                System.getProperty("GOOGLE_CHROME_SHIM",
+//                        Optional.ofNullable(BscScanWebParser.class.getClassLoader().getResource("chromedriver_win32/chromedriver.exe"))
+//                                .map(URL::getFile)
+//                                .orElseThrow()
+//                )
+//        );
         ChromeOptions options = new ChromeOptions();
         options.addArguments("headless");
+        options.setBinary(System.getProperty("GOOGLE_CHROME_SHIM"));
         return new ChromeDriver(options);
     }
 }
