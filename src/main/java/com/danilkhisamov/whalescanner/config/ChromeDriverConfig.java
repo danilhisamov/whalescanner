@@ -15,19 +15,21 @@ import java.util.Optional;
 
 @Configuration
 public class ChromeDriverConfig {
-    @PostConstruct
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-    }
+//    @PostConstruct
+//    public void setUp() {
+//        WebDriverManager.chromedriver().setup();
+//    }
 
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public ChromeDriver chromeDriver() {
-//        String driverFile = Optional.ofNullable(BscScanWebParser.class.getClassLoader().getResource("chromedriver_win32/chromedriver.exe"))
-//                .map(URL::getFile)
-//                .orElseThrow();
-//
-//        System.setProperty("webdriver.chrome.driver", driverFile);
+        System.setProperty("webdriver.chrome.driver",
+                System.getProperty("GOOGLE_CHROME_SHIM",
+                        Optional.ofNullable(BscScanWebParser.class.getClassLoader().getResource("chromedriver_win32/chromedriver.exe"))
+                                .map(URL::getFile)
+                                .orElseThrow()
+                )
+        );
         ChromeOptions options = new ChromeOptions();
         options.addArguments("headless");
         return new ChromeDriver(options);
