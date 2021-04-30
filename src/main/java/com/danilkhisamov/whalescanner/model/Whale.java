@@ -23,7 +23,7 @@ public class Whale implements Serializable {
     private String address;
     private String name;
     private String lastTransaction;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> subscribedChats = new HashSet<>();
 
     public String toSmallString() {

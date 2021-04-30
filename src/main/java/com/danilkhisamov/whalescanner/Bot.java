@@ -137,6 +137,17 @@ public class Bot extends AbilityBot {
                 .build();
     }
 
+    public Ability dailyReport() {
+        return Ability.builder()
+                .name("daily")
+                .info("Get daily report. Parameters[address]")
+                .input(1)
+                .privacy(PUBLIC)
+                .locality(ALL)
+                .action(cnt -> sendMessages(commandProcessor.processDailyReportCommand(cnt)))
+                .build();
+    }
+
     public Ability list() {
         return Ability.builder()
                 .name("list")

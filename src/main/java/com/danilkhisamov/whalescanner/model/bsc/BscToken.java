@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.text.StringEscapeUtils;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Data
@@ -26,24 +23,6 @@ public class BscToken {
     private String change;
     private String valueBNB;
     private String valueUSD;
-
-    public static BscToken fromString(String s) {
-        Matcher matcher = TOKEN_PATTERN.matcher(s);
-        if (matcher.find()) {
-            return BscToken.builder()
-                    .name(matcher.group("tokenName"))
-                    .address(matcher.group("tokenAddress"))
-                    .symbol(matcher.group("tokenSymbol"))
-                    .quantity(matcher.group("quantity"))
-                    .price(matcher.group("tokenPrice"))
-                    .change(matcher.group("tokenChange"))
-                    .valueBNB(matcher.group("tokenValueBNB"))
-                    .valueUSD(matcher.group("tokenValueUSD"))
-                    .build();
-        } else {
-            throw new IllegalArgumentException(String.format("String \"%s\" doesnt match pattern %s", StringEscapeUtils.escapeJava(s), StringEscapeUtils.escapeJava(TOKEN_PATTERN.toString())));
-        }
-    }
 
     public static BscToken fromTDList(List<WebElement> tds) {
         String[] nameAddress = tds.get(1).getText().split("\n");
