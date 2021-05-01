@@ -1,20 +1,26 @@
 package com.danilkhisamov.whalescanner.config;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class ChromeDriverConfig {
+    @Value("${spring.profiles.active}")
+    private String profile;
+
     @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public ChromeDriver chromeDriver() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("headless");
-        options.setBinary(System.getenv("GOOGLE_CHROME_SHIM"));
+        if ("prod".equals(profile)) {
+            options.setBinary(System.getenv("GOOGLE_CHROME_SHIM"));
+        } else if ("dev".equals(profile)) {
+            WebDriverManager.chromedriver().setup();
+        }
         return new ChromeDriver(options);
     }
 }

@@ -65,7 +65,7 @@ public class Bot extends AbilityBot {
                 .name("register")
                 .info("Register whale. Parameters[address, name]")
                 .input(2)
-                .privacy(PUBLIC)
+                .privacy(ADMIN)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processRegisterCommand(cnt)))
                 .build();
@@ -76,7 +76,7 @@ public class Bot extends AbilityBot {
                 .name("delete")
                 .info("Delete whale. Parameters[address]")
                 .input(1)
-                .privacy(PUBLIC)
+                .privacy(ADMIN)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processDeleteCommand(cnt)))
                 .build();
@@ -142,7 +142,7 @@ public class Bot extends AbilityBot {
                 .name("daily")
                 .info("Get daily report. Parameters[address]")
                 .input(1)
-                .privacy(PUBLIC)
+                .privacy(ADMIN)
                 .locality(ALL)
                 .action(cnt -> sendMessages(commandProcessor.processDailyReportCommand(cnt)))
                 .build();
@@ -152,7 +152,7 @@ public class Bot extends AbilityBot {
         return Ability.builder()
                 .name("list")
                 .info("Get list of registered whales")
-                .privacy(PUBLIC)
+                .privacy(ADMIN)
                 .locality(ALL)
                 .action(cnt -> sendMessage(commandProcessor.processListCommand(cnt)))
                 .build();
