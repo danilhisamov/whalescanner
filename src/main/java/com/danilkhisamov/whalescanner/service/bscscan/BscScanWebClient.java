@@ -4,6 +4,7 @@ import com.danilkhisamov.whalescanner.model.bsc.BscScanResponse;
 import com.danilkhisamov.whalescanner.model.bsc.BscScanResponseString;
 import com.danilkhisamov.whalescanner.model.bsc.BscScanResponseTransactions;
 import com.danilkhisamov.whalescanner.model.bsc.BscTransaction;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class BscScanWebClient {
     private static final String BASE_URL = "https://api.bscscan.com/api";
     private final WebClient webClient;
+    @Value("${whalescanner.bsc.api.key}")
+    private String apiKey;
 
     public BscScanWebClient() {
         this.webClient = WebClient.create(BASE_URL);
@@ -52,6 +55,7 @@ public class BscScanWebClient {
                         .queryParam("page", page)
                         .queryParam("offset", count)
                         .queryParam("sort", "desc")
+                        .queryParam("apikey", apiKey)
                         .build())
                 .retrieve()
                 .bodyToMono(BscScanResponseTransactions.class)
