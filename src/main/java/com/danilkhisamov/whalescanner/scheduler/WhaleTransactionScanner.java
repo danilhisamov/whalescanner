@@ -71,7 +71,7 @@ public class WhaleTransactionScanner {
     private List<BscTransaction> getNewTransactions(Whale whale) {
         final List<BscTransaction> newTransactions = new LinkedList<>();
         long page = 1;
-        long count = 100;
+        long count = 10;
         while (true) {
             List<BscTransaction> list = bscScanWebClient.getLastTransactions(whale.getAddress(), count, page);
             if (!CollectionUtils.isEmpty(list)) {
